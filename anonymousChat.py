@@ -126,16 +126,24 @@ def message_handler(update: Update, context: CallbackContext):
         partner_id = active_chats[user_id]
         context.bot.send_message(partner_id, update.message.text)
 
-# Main function
 def main():
-    updater = Updater("7754183681:AAGlGy_pHVgEQKmvIBjeDXY-vrZMqU9cf4Y")
+    # Replace with your actual Telegram Bot API token
+    bot_token = '7256270773:AAGccvp6zUWHQaLzcaJKM6oYCGNnqebuHU0'
+    updater = Updater(bot_token)
+
     dispatcher = updater.dispatcher
 
+    # Register command handlers
     dispatcher.add_handler(CommandHandler("start", start))
     dispatcher.add_handler(CallbackQueryHandler(button_handler))
     dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, message_handler))
 
-    updater.start_polling()
+    # Start the webhook to listen for messages
+    updater.start_webhook(listen='0.0.0.0',
+                          port=int(os.environ.get('PORT', 5000)),
+                          url_path=bot_token,
+                          webhook_url=f'https://telegrambot-msio.onrender.com/{bot_token}')
+
     updater.idle()
 
 if __name__ == "__main__":
