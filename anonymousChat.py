@@ -128,7 +128,7 @@ def message_handler(update: Update, context: CallbackContext):
 
 # Main function
 def main():
-    updater = Updater("YOUR_BOT_TOKEN_HERE")
+    updater = Updater("7754183681:AAGlGy_pHVgEQKmvIBjeDXY-vrZMqU9cf4Y")
     dispatcher = updater.dispatcher
 
     dispatcher.add_handler(CommandHandler("start", start))
