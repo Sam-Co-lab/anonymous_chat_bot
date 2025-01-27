@@ -5,9 +5,10 @@ from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, MessageHandler, Filters, CallbackContext
 
 # GitHub configuration
-GITHUB_TOKEN = "your_github_personal_access_token"
-GITHUB_REPO = "your_github_username/your_repo_name"
-PICKLE_FILE = "users_data.pkl"
+GITHUB_TOKEN = os.environ.get('GitAccToken')
+REPO_OWNER = "Sam-Co-lab"
+REPO_NAME = "Data"
+FILE_PATH = "blocked.pkl"
 
 GITHUB_API_URL = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{PICKLE_FILE}"
 HEADERS = {
@@ -123,7 +124,7 @@ def message_handler(update: Update, context: CallbackContext):
 
 # Main function
 def main():
-    updater = Updater("your_telegram_bot_token")
+    updater = Updater("7754183681:AAGlGy_pHVgEQKmvIBjeDXY-vrZMqU9cf4Y")
     dispatcher = updater.dispatcher
 
     dispatcher.add_handler(CommandHandler("start", start))
