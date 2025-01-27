@@ -5,9 +5,14 @@ import requests
 import base64
 import pickle
 import random
+import logging
 from telegram import Update, Bot, ChatPermissions, InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup, KeyboardButton
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext, CallbackQueryHandler
 from telegram.error import BadRequest
+
+# Set up logging
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 GITHUB_TOKEN = os.environ.get('GitAccToken')
 REPO_OWNER = "Sam-Co-lab"
@@ -44,7 +49,7 @@ def update_data(data):
         }
         requests.put(GITHUB_API_URL, headers=HEADERS, json=payload)
     except Exception as e:
-        print(f"Error updating data: {e}")
+        logger.error(f"Error updating data: {e}")
 
 # Initialize user data
 data = load_data()
@@ -52,6 +57,7 @@ active_chats = {}
 
 # Start command handler
 def start(update: Update, context: CallbackContext):
+    logger.info("Received /start command")
     user_id = update.effective_user.id
     if user_id not in data:
         data[user_id] = {"name": None, "age": None, "gender": None}
