@@ -4,8 +4,10 @@ import re
 import requests
 import base64
 import pickle
+import random
 from telegram import Update, Bot, ChatPermissions, InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup, KeyboardButton
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext, CallbackQueryHandler
+from telegram.error import BadRequest
 
 GITHUB_TOKEN = os.environ.get('GitAccToken')
 REPO_OWNER = "Sam-Co-lab"
@@ -126,6 +128,7 @@ def message_handler(update: Update, context: CallbackContext):
         partner_id = active_chats[user_id]
         context.bot.send_message(partner_id, update.message.text)
 
+# Main function
 def main():
     # Replace with your actual Telegram Bot API token
     bot_token = '7256270773:AAGccvp6zUWHQaLzcaJKM6oYCGNnqebuHU0'
