@@ -155,7 +155,7 @@ def main():
     updater.start_webhook(listen='0.0.0.0',
                           port=int(os.environ.get('PORT', 5000)),
                           url_path=bot_token,
-                          webhook_url=f'https://anonymous-chat-bot.onrender.com/{bot_token}')
+                          webhook_url=f'https://telegrambot-msio.onrender.com/{bot_token}')
 
     updater.idle()
 
