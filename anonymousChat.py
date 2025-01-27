@@ -12,7 +12,7 @@ from telegram.error import BadRequest
 GITHUB_TOKEN = os.environ.get('GitAccToken')
 REPO_OWNER = "Sam-Co-lab"
 REPO_NAME = "Data"
-FILE_PATH = "blocked.pkl"
+FILE_PATH = "userData.pkl"
 
 GITHUB_API_URL = f"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/contents/{FILE_PATH}"
 HEADERS = {
