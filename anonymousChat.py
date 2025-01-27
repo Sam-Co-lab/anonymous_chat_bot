@@ -33,6 +33,7 @@ def load_data():
         content = response.json()["content"]
         return pickle.loads(base64.b64decode(content))
     except Exception:
+        logger.error("Failed to load data from GitHub")
         return {}
 
 # Update pickle file on GitHub
@@ -59,11 +60,13 @@ active_chats = {}
 def start(update: Update, context: CallbackContext):
     logger.info("Received /start command")
     user_id = update.effective_user.id
+    logger.info(f"User ID: {user_id}")
     if user_id not in data:
         data[user_id] = {"name": None, "age": None, "gender": None}
         update_data(data)
         update.message.reply_text("Welcome! Please enter your name:")
         context.user_data["updating"] = "name"
+        logger.info("New user; asking for name")
     else:
         keyboard = [
             [InlineKeyboardButton("Start a Chat", callback_data="start_chat")],
@@ -75,6 +78,7 @@ def start(update: Update, context: CallbackContext):
         update.message.reply_text(
             "Welcome back! Please choose an option:", reply_markup=reply_markup
         )
+        logger.info("Returning user; displaying options")
 
 # Handle button presses
 def button_handler(update: Update, context: CallbackContext):
