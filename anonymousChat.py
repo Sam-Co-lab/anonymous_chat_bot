@@ -1,16 +1,18 @@
-import pickle
-import random
+import os
+import time
+import re
 import requests
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, MessageHandler, Filters, CallbackContext
+import base64
+import pickle
+from telegram import Update, Bot, ChatPermissions, InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup, KeyboardButton
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext, CallbackQueryHandler
 
-# GitHub configuration
 GITHUB_TOKEN = os.environ.get('GitAccToken')
 REPO_OWNER = "Sam-Co-lab"
 REPO_NAME = "Data"
 FILE_PATH = "blocked.pkl"
 
-GITHUB_API_URL = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{PICKLE_FILE}"
+GITHUB_API_URL = f"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/contents/{FILE_PATH}"
 HEADERS = {
     "Authorization": f"token {GITHUB_TOKEN}",
     "Accept": "application/vnd.github.v3+json",
@@ -52,17 +54,19 @@ def start(update: Update, context: CallbackContext):
     if user_id not in data:
         data[user_id] = {"name": None, "age": None, "gender": None}
         update_data(data)
+        update.message.reply_text("Welcome! Please enter your name:")
+        context.user_data["updating"] = "name"
+    else:
+        keyboard = [
+            [InlineKeyboardButton("Start a Chat", callback_data="start_chat")],
+            [InlineKeyboardButton("End Chat", callback_data="end_chat")],
+            [InlineKeyboardButton("Settings", callback_data="settings")],
+        ]
+        reply_markup = InlineKeyboardMarkup(keyboard)
 
-    keyboard = [
-        [InlineKeyboardButton("Start a Chat", callback_data="start_chat")],
-        [InlineKeyboardButton("End Chat", callback_data="end_chat")],
-        [InlineKeyboardButton("Settings", callback_data="settings")],
-    ]
-    reply_markup = InlineKeyboardMarkup(keyboard)
-
-    update.message.reply_text(
-        "Welcome to the anonymous chat bot! Please choose an option:", reply_markup=reply_markup
-    )
+        update.message.reply_text(
+            "Welcome back! Please choose an option:", reply_markup=reply_markup
+        )
 
 # Handle button presses
 def button_handler(update: Update, context: CallbackContext):
@@ -124,7 +128,7 @@ def message_handler(update: Update, context: CallbackContext):
 
 # Main function
 def main():
-    updater = Updater("7754183681:AAGlGy_pHVgEQKmvIBjeDXY-vrZMqU9cf4Y")
+    updater = Updater("YOUR_BOT_TOKEN_HERE")
     dispatcher = updater.dispatcher
 
     dispatcher.add_handler(CommandHandler("start", start))
